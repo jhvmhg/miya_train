@@ -9,8 +9,9 @@ from lib.Data_show import Data_show
 class Phone_cla_Dataset(Dataset):
     """Face Landmarks dataset."""
     
-    maxClassNum = 0
-    
+#     maxClassNum = 0
+    maxClassNum =  max(list(Data_show.phone2class.values())) + 1
+    class_trans_vector = None
 
     def __init__(self,phone_label=None, feats=None, transform=None):
         """
@@ -22,7 +23,7 @@ class Phone_cla_Dataset(Dataset):
         """
         
         Phone_cla_Dataset.class_trans_vector = np.vectorize(Phone_cla_Dataset.class_trans)
-        Phone_cla_Dataset.maxClassNum =  max(list(Data_show().phone2class.values())) + 1
+#         Phone_cla_Dataset.maxClassNum =  max(list(Data_show().phone2class.values())) + 1
         
         if phone_label == None or feats == None:
             self.phone_label = { u:d for u,d in kaldi_io.read_vec_int_ark("feats/ali.1.ph") }

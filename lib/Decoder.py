@@ -1,3 +1,6 @@
+import numpy as np
+from lib.Data_show import Data_show
+
 class Decoder():
 #     pred_label_aishell_with_softmax = torch.nn.Softmax()(pred_label_aishell)
     def __init__(self,phone2class):
