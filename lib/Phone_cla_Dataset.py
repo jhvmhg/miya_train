@@ -9,8 +9,8 @@ from lib.Data_show import Data_show
 class Phone_cla_Dataset(Dataset):
     """Face Landmarks dataset."""
     
-#     maxClassNum = 0
-    maxClassNum =  max(list(Data_show.phone2class.values())) + 1
+
+    maxClassNum =  -1
     class_trans_vector = None
 
     def __init__(self,phone_label=None, feats=None, transform=None):
@@ -21,9 +21,9 @@ class Phone_cla_Dataset(Dataset):
             transform (callable, optional): Optional transform to be applied
                 on a sample.
         """
-        
-        Phone_cla_Dataset.class_trans_vector = np.vectorize(Phone_cla_Dataset.class_trans)
-#         Phone_cla_Dataset.maxClassNum =  max(list(Data_show().phone2class.values())) + 1
+        if Phone_cla_Dataset.class_trans_vector == None:
+            Phone_cla_Dataset.class_trans_vector = np.vectorize(Phone_cla_Dataset.class_trans)
+            Phone_cla_Dataset.maxClassNum = max(list(Data_show.phone2class.values())) + 1
         
         if phone_label == None or feats == None:
             self.phone_label = { u:d for u,d in kaldi_io.read_vec_int_ark("feats/ali.1.ph") }
@@ -37,14 +37,14 @@ class Phone_cla_Dataset(Dataset):
 
         self.transform = transform
         
-        for utt, phones in phone_label.items():
-            self.feats_list.append(feats[utt])
-            a=np.zeros(feats[utt].shape[0], int)
-            for i in range(a.shape[0]):
-                a[i]=phone_label[utt][(i)//3]
-            self.phone_label_list.append(Phone_cla_Dataset.class_trans_vector(a))
-#             self.phone_label_list = np.concatenate(( self.phone_label_list,self.phone_label[utt]))
-            
+        for utt, feat in feats.items():
+            if utt in phone_label:
+                self.feats_list.append(feat)
+                a=np.zeros(feat.shape[0], int)
+                for i in range(a.shape[0]):
+                    a[i]=phone_label[utt][(i)//3]
+                self.phone_label_list.append(Phone_cla_Dataset.class_trans_vector(a))
+
         self.feats_nd = np.concatenate(tuple(self.feats_list))
         self.phone_label_nd = np.concatenate(tuple(self.phone_label_list))
            
