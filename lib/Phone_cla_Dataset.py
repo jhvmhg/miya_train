@@ -1,8 +1,16 @@
 from torch.utils.data import Dataset
 import kaldi_io
+import numpy as np
+from lib.Data_show import Data_show
+
+
+
 
 class Phone_cla_Dataset(Dataset):
     """Face Landmarks dataset."""
+    
+    maxClassNum = 0
+    
 
     def __init__(self,phone_label=None, feats=None, transform=None):
         """
@@ -12,6 +20,10 @@ class Phone_cla_Dataset(Dataset):
             transform (callable, optional): Optional transform to be applied
                 on a sample.
         """
+        
+        Phone_cla_Dataset.class_trans_vector = np.vectorize(Phone_cla_Dataset.class_trans)
+        Phone_cla_Dataset.maxClassNum =  max(list(Data_show().phone2class.values())) + 1
+        
         if phone_label == None or feats == None:
             self.phone_label = { u:d for u,d in kaldi_io.read_vec_int_ark("feats/ali.1.ph") }
             self.feats = { u:d for u,d in kaldi_io.read_mat_scp("feats/feats.scp") }
@@ -29,7 +41,7 @@ class Phone_cla_Dataset(Dataset):
             a=np.zeros(feats[utt].shape[0], int)
             for i in range(a.shape[0]):
                 a[i]=phone_label[utt][(i)//3]
-            self.phone_label_list.append(function_vector(a))
+            self.phone_label_list.append(Phone_cla_Dataset.class_trans_vector(a))
 #             self.phone_label_list = np.concatenate(( self.phone_label_list,self.phone_label[utt]))
             
         self.feats_nd = np.concatenate(tuple(self.feats_list))
@@ -50,4 +62,12 @@ class Phone_cla_Dataset(Dataset):
 
         return sample
     
+    def class_trans(x):
+        if x in Data_show.phone2class:
+            result = Data_show.phone2class[x]
+        else:
+            result = Phone_cla_Dataset.maxClassNum
+
+        return result
+
         

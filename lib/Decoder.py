@@ -1,4 +1,4 @@
-class Decoder:
+class Decoder():
 #     pred_label_aishell_with_softmax = torch.nn.Softmax()(pred_label_aishell)
     def __init__(self,phone2class):
         self.s = -0.2

@@ -1,20 +1,20 @@
 class Data_show:
-    phone2class={1:0, 3:0,129:1, 63:2, 61:3, 27:4, 128:5, 64:6, 92:7, 69:8}
+    phone2class={}
     phones2txt = {}
     
     def __init__(self, phone2class ={1:0, 3:0,129:1, 63:2, 61:3, 27:4, 128:5, 64:6, 92:7, 69:8}, phones_path="phones.txt"):
         
-        self.phone2class = phone2class
+        Data_show.phone2class = phone2class
         with open(phones_path) as f:
             for line in f:
                 v = line.strip().split()
-                self.phones2txt[int(v[1])] = v[0]
+                Data_show.phones2txt[int(v[1])] = v[0]
 
     def show_softmax(self, pred_label_with_softmax):
         
         title = ""
-        for i in self.phone2class.keys():
-            title += "\t" + self.phones2txt[i]
+        for i in Data_show.phone2class.keys():
+            title += "\t" + Data_show.phones2txt[i]
         title += "\tother\n"
         
         content = ""
