@@ -23,6 +23,7 @@ class Phone_cla_Dataset(Dataset):
         """
         if Phone_cla_Dataset.class_trans_vector == None:
             Phone_cla_Dataset.class_trans_vector = np.vectorize(Phone_cla_Dataset.class_trans)
+        if Phone_cla_Dataset.maxClassNum == -1:
             Phone_cla_Dataset.maxClassNum = max(list(Data_show.phone2class.values())) + 1
         
         if phone_label == None or feats == None:
