@@ -26,3 +26,28 @@ class Data_show:
      
         return title, content
     
+    
+class Data_show_word:
+    class2word=[]
+    
+    def __init__(self, class2word =["other", "你","好","米","雅"]):
+        
+        Data_show_word.class2word = class2word
+
+
+    def show_softmax(self, pred_label_with_softmax):
+        
+        title = ""
+        for i in range(len(Data_show_word.class2word)):
+            title += "\t" + Data_show_word.class2word[i]
+        title += "\n"
+        
+        content = ""
+        for i in range(0,pred_label_with_softmax.shape[0]):
+            content += str(i) + ":\t"
+            for j in range(0,pred_label_with_softmax.shape[1]):
+                content += '%.2f\t' %pred_label_with_softmax[i][j]
+            content += "\n"
+     
+        return title, content
+    
