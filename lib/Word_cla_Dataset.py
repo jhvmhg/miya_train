@@ -1,6 +1,7 @@
 from torch.utils.data import Dataset
 import kaldi_io
 import numpy as np
+import torch
 
 
 
