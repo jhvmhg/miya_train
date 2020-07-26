@@ -1,1 +1,1 @@
-# miya_train jhvmhg
+# miya + aishell2 语音唤醒
